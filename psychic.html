@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Psychic</title>
+</head>
+<body>
+
+<h1> The Psychic Game</h1>
+
+<div id="wins"></div>
+<br>
+<div id="losses"></div>
+<br>
+<div id="guessesLeft"></div>
+<br>
+<div id="wrongGuess"></div>
+
+<script type="text/javascript">
+
+//variables to be used in the game	
+var alphabet = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'];
+var wins = 0;
+var loss = 0;
+var guessLeft = 9;
+var guesses = [];
+var letterBack = "";
+
+
+//this will produce a random number between 0-26, this will be used to choose a word out of the alphabet array
+function randomNumber() {
+  var number = Math.floor(Math.random(number) * 26);
+    return number; 
+};
+
+
+
+//This will take the number from randomNumber and retrieve that word from the alphabet array
+function wordChoice() {
+        var num = randomNumber();
+        //test to make sure num and wordChoice correspond
+        var wordChoice = alphabet[num];
+        //test the letter chosen
+        console.log(wordChoice);
+        //letterBack.push(wordChoice);
+        letterBack = wordChoice;
+        return wordChoice;
+        console.log(letterBack);
+  
+};
+
+var chosenLetter = wordChoice(alphabet);
+
+//this will test if the key typed is a letter
+function isLetter(keyCode) {
+	return keyCode >=65 && keyCode <=90;
+};
+
+
+//clear game after win or loss
+function init() {
+	//reset guesses to empty
+	guesses = [];
+	//reset guesses left
+	guessLeft = 9
+	//choose a new letter
+	wordChoice(alphabet);
+	//console.log(chosenLetter);
+}
+
+
+//user interface
+
+
+
+// Add keyup event listener
+document.addEventListener('keyup', handleKeystroke);
+
+//this starts the game
+//init()
+
+
+//keyCode gives the number of the keystroke and letter gives the letter which will be compared with the random letter of the alphabet chosen by the computer
+function handleKeystroke(event) {
+   	var keyCode = event.keyCode;
+   	letter = String.fromCharCode(keyCode).toLowerCase();
+   
+   //if I want to test the letter being guessed by the player
+   //console.log(letter);
+   
+   //check to see if letter hasn't been guessed
+	if(!isLetter(keyCode) || guesses.indexOf(letter) > -1) {
+		return;
+	}
+
+	//compare the users guess with the random letter chosen by the computer
+		if (letter === chosenLetter) {
+			alert("you win!");
+			wins++;
+			init();
+			}
+			else { 
+				guessLeft--;
+				guesses.push(letter);
+				//if I want to test the guesses array
+				//console.log(guesses);
+				//wrongGuess();
+				if (guessLeft === 0) {
+					loss++
+					init();
+					
+				}
+			}
+		
+		/*If I want to test how many guesses remain
+		console.log(guessLeft);*/
+
+//letter guessed into guesses array
+/*function wrongGuess (letter) {
+	guesses.push(letter);
+	console.log(guesses);
+
+}*/
+
+
+var html = "<p>Wins: "  + wins + "<br>" + "<p>Losses: " + loss + "<p>Guesses Left: " + guessLeft + "</p>" + "<p>Letters Already Guessed: " + guesses.join(", ") + "</p>";
+
+document.querySelector("#guessesLeft").innerHTML = html;
+
+
+
+}
+
+</script>
+
+
+
+</body>
+</html>
